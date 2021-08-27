@@ -1,0 +1,29 @@
+{
+  "name": "dynamo-partiql-result-in-pg",
+  "version": "0.9.0-SNAPSHOT",
+  "description": "A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-of-box Postgres",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --outDir lib",
+    "exec": "node ./lib/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenjianjx/dynamo-partiql-result-in-pg.git"
+  },
+  "keywords": [
+    "dynamo",
+    "postgres",
+    "PartiQL"
+  ],
+  "author": "chenjianjx",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/chenjianjx/dynamo-partiql-result-in-pg/issues"
+  },
+  "homepage": "https://github.com/chenjianjx/dynamo-partiql-result-in-pg#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "4.4.2"
+  }
+}
