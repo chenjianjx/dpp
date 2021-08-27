@@ -102,3 +102,4 @@ dist
 
 # TernJS port file
 .tern-port
+/dynamo-partiql-result-in-pg.iml
