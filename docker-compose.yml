@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: dpp
+      POSTGRES_PASSWORD: dpp
+      POSTGRES_DB: dpp
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "21085:5432"
+    networks:
+      - postgres     
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dpp@dpp.dpp
+      PGADMIN_DEFAULT_PASSWORD: dpp       
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+       - ./docker/pgadmin-servers.json:/pgadmin4/servers.json
+    ports:
+      - "21086:80"
+    networks:
+      - postgres
+     
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
+    pgadmin:    
