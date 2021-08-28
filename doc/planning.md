@@ -16,6 +16,15 @@
 ## Let the cli parse partiql and output the result to console 
 
 
+### Test Strategy
+
+* Test fixture:
+    * Create a dynamo table
+    * Insert tons of records so that pagination will be there
+    * The columns in every record should include all kinds of dynamo types, but the order is random
+* Test step
+    * Run it. Expecting no error and all records are printed
+
 ## Set up docker-compose for pg and pgadmin
 
 

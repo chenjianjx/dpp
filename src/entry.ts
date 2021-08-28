@@ -25,7 +25,6 @@ export function getQLFromArgs(args: string[]) {
 
     const ql: string = args[0];
  
-
     if (ql.split(" ")[0].toLowerCase() !== "select") {
         throw 'Only "select" statements are supported';
     }

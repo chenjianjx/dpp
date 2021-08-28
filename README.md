@@ -5,8 +5,7 @@ A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-
 # How to use
 
 ## Pre-requisites
-* AWS Credentials Configured
-  * If you don't know what it means, just install AWS CLI and configure it (TODO: link)
+* AWS CLI (configured)
 * Docker
 
 
