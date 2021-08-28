@@ -1,15 +1,20 @@
+import runPartiQL from './runPartiQL';
 
 
 export function execute(args: string[]) {
-    let ql;
-    try {
-        ql = getQLFromArgs(args);
-    } catch (e) {
-        console.error(e);
-        return;
-    }
+    (async () => {
+        let ql;
+        try {
+            ql = getQLFromArgs(args);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
 
-    console.log(ql);
+        console.log("Your QL is:  " + ql);
+        const items = await runPartiQL(ql);
+        console.log(items.length + " items in the QL's result");
+    })();
 }
 
 
@@ -24,7 +29,7 @@ export function getQLFromArgs(args: string[]) {
     }
 
     const ql: string = args[0];
- 
+
     if (ql.split(" ")[0].toLowerCase() !== "select") {
         throw 'Only "select" statements are supported';
     }
@@ -32,3 +37,4 @@ export function getQLFromArgs(args: string[]) {
     return ql;
 
 }
+
