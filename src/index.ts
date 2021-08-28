@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
+import { execute } from "./entry";
 
-const argv = yargs(hideBin(process.argv)).argv;
+const args = process.argv.slice(2);
 
+execute(args);
 
-console.log(argv['_']);
