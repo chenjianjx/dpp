@@ -2,6 +2,7 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { toBase64 } from "@aws-sdk/util-base64-node";
 import { Client, ClientConfig, QueryResult } from "pg";
+import { isDatabaseKeyword } from "./util/pgUtil";
 
 export interface SaveToPGResult {
     tableName: string,
@@ -51,7 +52,14 @@ async function createTable(client: Client, items: { [key: string]: AttributeValu
 
     let ddl: string = `create table ${tableName} ( \n`;
 
-    const columnDefs: string = Array.from(columnNames.values()).map(cn => ` ${cn} text`).join(",\n");
+    const columnDefs: string = Array.from(columnNames.values())
+        .map(cn => {
+            if (isDatabaseKeyword(cn)) {
+                cn = cn + "_unkeyworded";
+            }
+            return ` ${cn} text`;
+        })
+        .join(",\n");
     ddl += columnDefs + "\n";
     ddl += ")";
 
