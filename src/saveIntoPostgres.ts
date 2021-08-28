@@ -55,7 +55,7 @@ async function createTable(client: Client, items: { [key: string]: AttributeValu
     ddl += columnDefs + "\n";
     ddl += ")";
 
-    // console.log(ddl);
+    console.log(`The ddl for the new table is going to be: \n ${ddl}`);
     await client.query(ddl);
     console.log(`Table ${tableName} created in Postgres`);
 
