@@ -22,7 +22,7 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
                 NextToken: NextToken
             });
             const results: ExecuteStatementOutput = await client.send(command);
-            console.log(`NextToken will be ` + results.NextToken);
+            //console.log(`NextToken will be ` + results.NextToken);
             items.push(...results.Items);
             NextToken = results.NextToken;
             if (!NextToken) {

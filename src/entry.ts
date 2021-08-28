@@ -1,8 +1,14 @@
+import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import runPartiQL from './runPartiQL';
+import saveIntoPostgres, { SaveToPGResult } from './saveIntoPostgres';
+import { StopWatch } from 'stopwatch-node';
 
 
 export function execute(args: string[]) {
     (async () => {
+        const sw = new StopWatch('Timer');
+
+
         let ql;
         try {
             ql = getQLFromArgs(args);
@@ -11,9 +17,21 @@ export function execute(args: string[]) {
             return;
         }
 
+
+        sw.start("Run PartiQL");
         console.log("Your QL is:  " + ql);
-        const items = await runPartiQL(ql);
+        const items: { [key: string]: AttributeValue; }[] = await runPartiQL(ql);
         console.log(items.length + " items in the QL's result");
+        sw.stop();
+
+
+        sw.start("Parse results and save to Postgres");
+        const saveToPGResult: SaveToPGResult = await saveIntoPostgres(items);
+        console.log(`\nAll the results have been saved to ${saveToPGResult.tableName} . Num of records is ${saveToPGResult.numOfRecords}`);
+        sw.stop();
+
+        sw.prettyPrint();
+
     })();
 }
 
