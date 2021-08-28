@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.28.0",
-    "pg": "8.7.1"
+    "pg": "8.7.1",
+    "stopwatch-node": "1.1.0"
   }
 }

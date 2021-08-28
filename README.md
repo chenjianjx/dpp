@@ -47,7 +47,9 @@ docker-compose down
 
 # For developers
 
-### Set up test table
+### Do a manual test
+
+#### Create a test table
 
 The table should
 * Be big enough so that "NextToken" can be tested
@@ -55,15 +57,19 @@ The table should
 
 To make this happen,
 ```
-cd ./doc/test
-
-./create-test-table.sh
-./put-test-items.js
+./doc/test/create-test-table.sh
+./doc/test/put-test-items.js
 
 ```
 
-After your testing,  clean up
+#### Run the program without docker build
 
 ```
-./delete-test-table.sh
+npm run build && node . "select * from DppTest"
+```
+
+#### Clean up
+
+```
+./doc/test/delete-test-table.sh
 ```
