@@ -16,6 +16,9 @@ A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-
 docker-compose up
 ```
 
+Go to [pgAdmin](http://localhost:21086) . You should see a pre-imported Postgres server. 
+
+
 * Run PartiQL 
 ```
 ./dpp "select * from ... "

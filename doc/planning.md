@@ -27,6 +27,8 @@
 
 ## Set up docker-compose for pg and pgadmin
 
+https://stackoverflow.com/questions/49912904/running-pgadmin4-in-docker-with-pre-configured-servers 
+
 
 ## Send partiql result to pg
 

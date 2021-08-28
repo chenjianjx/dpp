@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "dpp": {
+            "Name": "dpp-postgres",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "dpp",
+            "Host": "postgres",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}
