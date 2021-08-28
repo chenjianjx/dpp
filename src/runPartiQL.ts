@@ -7,6 +7,7 @@ import { AttributeValue, DynamoDBClient, ExecuteStatementCommand, ExecuteStateme
  * @returns the items
  */
 export default async function run(ql: string): Promise<{ [key: string]: AttributeValue; }[]> {
+    console.log("Running PartiQL...")
 
     const client = new DynamoDBClient({ });
 
@@ -24,11 +25,13 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
             const results: ExecuteStatementOutput = await client.send(command);
             //console.log(`NextToken will be ` + results.NextToken);
             items.push(...results.Items);
+            console.log(`Fetched ${items.length} records up to now`);
             NextToken = results.NextToken;
             if (!NextToken) {
                 break;
             }
         }        
+        console.log(`Fetched ${items.length} records in total `)
         return items;
     } finally {
         client.destroy();

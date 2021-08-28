@@ -28,7 +28,7 @@ If new features of this tool are available, run `git pull` and run the commands 
 docker-compose up
 ```
 
-Go to [pgAdmin](http://localhost:21086) . You should see a pre-imported Postgres server. 
+Go to [pgAdmin](http://localhost:21086) . You should see a pre-imported Postgres server (password: `dpp`)
 
 
 ### Run the tool
