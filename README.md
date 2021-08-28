@@ -1,4 +1,4 @@
-# dynamo-partiql-result-in-pg
+# DynamoDB Partiql result in Postgres
 A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-of-box Postgres. Zero config.
 
 
