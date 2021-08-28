@@ -19,7 +19,7 @@ docker-compose up
 
 * Run PartiQL 
 ```
-./dpp "select * from \"my-dynamo-table\" where ... "
+./dpp "select * from ... "
 ```
 (Windows user please run the docker command in file ./dpp)
 
@@ -27,7 +27,7 @@ docker-compose up
 You will see
 
 ```
-The results are in postgres table `my-dynamo-table-xxx`
+The results are in postgres table 'xxx'
 ```
 
 Then go to [pgAdmin](http://localhost:21086) to query the table
