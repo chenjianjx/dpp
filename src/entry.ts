@@ -1,7 +1,7 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { StopWatch } from 'stopwatch-node';
 import runPartiQL from './runPartiQL';
 import saveIntoPostgres, { SaveToPGResult } from './saveIntoPostgres';
-import { StopWatch } from 'stopwatch-node';
 
 
 export function execute(args: string[]) {
@@ -28,6 +28,9 @@ export function execute(args: string[]) {
         sw.start("Parse results and save to Postgres");
         const saveToPGResult: SaveToPGResult = await saveIntoPostgres(items);
         console.log(`\nAll the results have been saved to ${saveToPGResult.tableName} . Num of records is ${saveToPGResult.numOfRecords}`);
+        if (saveToPGResult.columnRenameRecords && Object.keys(saveToPGResult.columnRenameRecords).length) {
+            console.log(`Note some columns have been renamed in Postgres for some reason: ${saveToPGResult.columnRenameRecords}`);
+        }
         sw.stop();
 
         sw.prettyPrint();

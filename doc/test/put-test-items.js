@@ -38,7 +38,8 @@ for (let i = 1; i <= 20000; i++) {
         c7: { "NS": [i.toString(), (i + 1).toString(), (i + 2).toString()] },
         c8: { "NULL": true},
         c9: { "S": "random-string-" + i },
-        c10: { "SS": ["random-ss-" + i, "random-ss-" + i * 2] }
+        c10: { "SS": ["random-ss-" + i, "random-ss-" + i * 2] },
+        primary: { "S": "random-value-of-illegal-column-name" + i }
     }
     items.push(item);
 
@@ -55,6 +56,6 @@ for (let i = 1; i <= 20000; i++) {
 /// finally add a row which has a new column 
 const itemWithNewColumn = {
     id: { "N": new Date().getTime().toString() },
-    c99: { "S": "A record with a new column" }
+    c99: { "S": "Extra column value" },
 }
 batchWriteItem([itemWithNewColumn]);

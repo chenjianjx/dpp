@@ -38,11 +38,12 @@ test('toInsertQuery', () => {
         "c8": { "NULL": true },
         "c9": { "S": "random-string-16998" },
         "id": { "N": "16998" },
-        "c1": { "B": fromBase64("D9w5ApvijXs=") }
+        "c1": { "B": fromBase64("D9w5ApvijXs=") },
+        "primary": { "S": "random-value-2021" }
     };
 
-    const iq = toInsertQuery(tableName, item);
-    expect(iq.sql).toBe("insert into test_table(c10,c2,c3,c4,c5,c6,c7,c8,c9,id,c1) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)");
+    const iq = toInsertQuery(tableName, {"primary": "primary_new"}, item);
+    expect(iq.sql).toBe("insert into test_table(c10,c2,c3,c4,c5,c6,c7,c8,c9,id,c1,primary_new) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)");
     // console.log(iq.values[2]);
     expect(iq.values).toStrictEqual([
         '["random-ss-16998","random-ss-33996"]',
@@ -55,7 +56,8 @@ test('toInsertQuery', () => {
         null,
         'random-string-16998',
         '16998',
-        'D9w5ApvijXs='
+        'D9w5ApvijXs=',
+        'random-value-2021'
     ]
     );
 

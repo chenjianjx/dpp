@@ -6,6 +6,7 @@ import { isDatabaseKeyword } from "./util/pgUtil";
 
 export interface SaveToPGResult {
     tableName: string,
+    columnRenameRecords: Record<string, string>,
     numOfRecords: number
 }
 
@@ -24,14 +25,15 @@ export default async function saveItemsToNewTable(items: { [key: string]: Attrib
 
     try {
 
-        const tableName = await createTable(client, items);
+        const createTableResult: CreateTableResult = await createTable(client, items);
 
-        await insertItems(client, tableName, items);
+        await insertItems(client, createTableResult.tableName, createTableResult.columnRenameRecords, items);
 
-        const numOfRecords = await getNumOfRecordsInTable(client, tableName);
+        const numOfRecords = await getNumOfRecordsInTable(client, createTableResult.tableName);
 
         return {
-            tableName: tableName,
+            tableName: createTableResult.tableName,
+            columnRenameRecords: createTableResult.columnRenameRecords,
             numOfRecords: numOfRecords
         }
 
@@ -42,20 +44,28 @@ export default async function saveItemsToNewTable(items: { [key: string]: Attrib
 
 }
 
-async function createTable(client: Client, items: { [key: string]: AttributeValue; }[]): Promise<string> {
+export interface CreateTableResult {
+    tableName: string;
+    columnRenameRecords: Record<string, string>;
+}
+
+async function createTable(client: Client, items: { [key: string]: AttributeValue; }[]): Promise<CreateTableResult> {
 
     const tableName = "t_" + new Date().getTime();
 
     const columnNames = extractColumnNames(items);
 
-
-
     let ddl: string = `create table ${tableName} ( \n`;
 
+    const columnRenameRecords: Record<string, string> = { };
+
     const columnDefs: string = Array.from(columnNames.values())
-        .map(cn => {
-            if (isDatabaseKeyword(cn)) {
-                cn = cn + "_unkeyworded";
+        .map(columnName => {
+            let cn = columnName;
+            if (isDatabaseKeyword(columnName)) {
+                const newColumnName = columnName + "_dekeyworded";
+                columnRenameRecords[columnName] = newColumnName;
+                cn = newColumnName;
             }
             return ` ${cn} text`;
         })
@@ -67,7 +77,10 @@ async function createTable(client: Client, items: { [key: string]: AttributeValu
     await client.query(ddl);
     console.log(`Table ${tableName} created in Postgres`);
 
-    return tableName;
+    return {
+        tableName: tableName,
+        columnRenameRecords: columnRenameRecords
+    };
 }
 
 
@@ -79,10 +92,10 @@ export function extractColumnNames(items: { [key: string]: AttributeValue; }[]):
     return columnNames;
 }
 
-async function insertItems(client: Client, tableName: string, items: { [key: string]: AttributeValue; }[]) {
+async function insertItems(client: Client, tableName: string, columnRenameRecords: Record<string, string>, items: { [key: string]: AttributeValue; }[]) {
     let savedCount = 0;
     for (const item of items) {
-        const iq: InsertQuery = toInsertQuery(tableName, item);
+        const iq: InsertQuery = toInsertQuery(tableName, columnRenameRecords, item);
         await client.query(iq.sql, iq.values);
         savedCount++;
         if (savedCount % 500 === 0) {
@@ -97,14 +110,19 @@ async function getNumOfRecordsInTable(client: Client, tableName: string): Promis
     return results.rows[0].count;
 }
 
-export function toInsertQuery(tableName: string, item: { [key: string]: AttributeValue; }): InsertQuery {
+export function toInsertQuery(tableName: string, columnRenameRecords: Record<string, string>, item: { [key: string]: AttributeValue; }): InsertQuery {
     const columns: string[] = [];
     const placeHolders: string[] = [];
     const values: string[] = [];
 
     let plIndex = 0;
     for (const [key, av] of Object.entries(item)) {
-        columns.push(key);
+        let columnName = key;
+        let newColumnName = columnRenameRecords[key];
+        if (newColumnName) {
+            columnName = newColumnName;
+        }
+        columns.push(columnName);
         placeHolders.push("$" + (++plIndex));
         values.push(attributeValueToString(av));
     }
