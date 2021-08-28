@@ -1,9 +1,10 @@
 import runPartiQL from './runPartiQL';
+import saveItems from './saveIntoPostgres';
 
 
 export function execute(args: string[]) {
     (async () => {
-        let ql;
+        let ql;        
         try {
             ql = getQLFromArgs(args);
         } catch (e) {
@@ -12,8 +13,13 @@ export function execute(args: string[]) {
         }
 
         console.log("Your QL is:  " + ql);
-        const items = await runPartiQL(ql);
-        console.log(items.length + " items in the QL's result");
+        // const items = await runPartiQL(ql);
+        // console.log(items.length + " items in the QL's result");
+
+
+        saveItems();
+
+
     })();
 }
 
