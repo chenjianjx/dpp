@@ -37,3 +37,30 @@ Todo: some screenshot
 ```bash
 docker-compose down
 ```
+
+
+
+
+
+# For developers
+
+### Set up test table
+
+The table should
+* Be big enough so that "NextToken" can be tested
+* Contain [all data types](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html) of DynamoDB
+
+To make this happen,
+```
+cd ./doc/test
+
+./create-test-table.sh
+./put-test-items.js
+
+```
+
+After your testing,  clean up
+
+```
+./delete-test-table.sh
+```
