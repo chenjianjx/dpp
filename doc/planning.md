@@ -34,6 +34,7 @@ https://stackoverflow.com/questions/49912904/running-pgadmin4-in-docker-with-pre
 
 
 ## Dockerise the cli tool
+Unsuccessful
 
 ## Try it with real world use case
 

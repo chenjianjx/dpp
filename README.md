@@ -6,12 +6,24 @@ A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-
 
 ## Pre-requisites
 * AWS CLI (configured)
-* Docker
+* Node
+
+## Install 
+
+Clone this repo, then
+
+```
+npm install
+npm run clean
+npm run build
+```
+
+If new features of this tool are available, run `git pull` and run the commands above again
 
 
-## Run it
+## Run
 
-* Start up Postgres and pgAdmin
+### Start up Postgres and pgAdmin
 ```bash
 docker-compose up
 ```
@@ -19,37 +31,29 @@ docker-compose up
 Go to [pgAdmin](http://localhost:21086) . You should see a pre-imported Postgres server. 
 
 
-* Run PartiQL 
+### Run the tool
 ```
 ./dpp "select * from ... "
 ```
-(Windows user please run the docker command in file ./dpp)
+*(If are a windows user, take a look at file `./dpp` and you'll know how to run it in Windows)*
 
 
-You will see
+From the console output you will see the table name for this run, e.g. `t_1630152784804`
 
+
+### Analyse the data in Postgres
+
+Go to [pgAdmin](http://localhost:21086)
 ```
-The results are in postgres table 'xxx'
+select * from t_1630152784804 where ...
 ```
-
-Then go to [pgAdmin](http://localhost:21086) to query the table
-
-Todo: some screenshot 
-
-* Shutdown Postgres (if needed)
-```bash
-docker-compose down
-```
-
-
-
 
 
 # For developers
 
-### Do a manual test
+## Do a manual test
 
-#### Create a test table
+### Create a test table
 
 The table should
 * Be big enough so that "NextToken" can be tested
@@ -59,16 +63,15 @@ To make this happen,
 ```
 ./doc/test/create-test-table.sh
 ./doc/test/put-test-items.js
-
 ```
 
-#### Run the program without docker build
+### Run the program against the new table
 
 ```
-npm run build && node . "select * from DppTest"
+./dpp "select * from DppTest"
 ```
 
-#### Clean up
+### Clean up
 
 ```
 ./doc/test/delete-test-table.sh

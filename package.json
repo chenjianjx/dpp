@@ -3,10 +3,8 @@
   "version": "0.9.0-SNAPSHOT",
   "description": "A command-line tool to run SQL(PartiQL) against DynamoDB and save result in out-of-box Postgres",
   "main": "bin/index.js",
-  "bin": {
-    "hello": "./bin/index.js"
-  },
   "scripts": {
+    "clean": "rimraf bin",
     "test": "jest",
     "build": "tsc --outDir bin"
   },
@@ -30,6 +28,7 @@
     "@types/node": "16.7.4",
     "@types/pg": "8.6.1",
     "jest": "27.1.0",
+    "rimraf": "3.0.2",
     "ts-jest": "27.0.5",
     "typescript": "4.4.2"
   },
