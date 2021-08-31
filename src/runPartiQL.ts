@@ -1,7 +1,8 @@
 
 import { AttributeValue, DynamoDBClient, ExecuteStatementCommand, ExecuteStatementOutput } from "@aws-sdk/client-dynamodb";
-import { fileSync } from 'tmp'
+import { fileSync as tempFileSync } from 'tmp'
 import { writeFileSync } from "fs";
+import { itemsToJson } from "./ItemsJsonConverter";
 
 /**
  * 
@@ -13,7 +14,7 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
 
     const client = new DynamoDBClient({ });
 
-    const items: { [key: string]: AttributeValue; }[] = [];
+    let items: { [key: string]: AttributeValue; }[] = [];
     let NextToken;
 
     try {
@@ -35,9 +36,11 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
         }
         console.log(`Fetched ${items.length} records in total `);
 
-        const itemsFilename:string = fileSync({ prefix: 'dpp-items-', postfix: '.json' }).name;
+        items = items.splice(0,1); console.log(items[0]);
 
-        await writeFileSync(itemsFilename, JSON.stringify(items));
+        const itemsFilename:string = tempFileSync({ prefix: 'dpp-items-', postfix: '.json' }).name;
+
+        await writeFileSync(itemsFilename, itemsToJson(items), {encoding: 'utf8'});
 
         console.log(`Items are saved in file ${itemsFilename} . You can use command "dpp-load" to load it to postgres without running the QL again. `);
 
@@ -46,3 +49,4 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
         client.destroy();
     }
 }
+

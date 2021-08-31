@@ -4,6 +4,9 @@ import { toBase64 } from "@aws-sdk/util-base64-node";
 import { Client, ClientConfig, QueryResult } from "pg";
 import { isDatabaseKeyword } from "./util/pgUtil";
 
+
+
+
 export interface SaveToPGResult {
     tableName: string,
     columnRenameRecords: Record<string, string>,
@@ -115,6 +118,8 @@ export function toInsertQuery(tableName: string, columnRenameRecords: Record<str
     const placeHolders: string[] = [];
     const values: string[] = [];
 
+    console.log(item);
+
     let plIndex = 0;
     for (const [key, av] of Object.entries(item)) {
         let columnName = key;
@@ -142,32 +147,7 @@ export interface InsertQuery {
     values: string[];
 }
 
-
-function attributeValueToString(av: AttributeValue): string {
-    const [type, value] = Object.entries(av)[0];
-    if (value === null || value === undefined) {
-        return null;
-    }
-    switch (type) {
-        case 'NULL': return null;
-        case 'N': return value.toString();
-        case 'B': return toBase64(value);
-        case 'S': return value;
-        case 'BOOL': return value.toString();
-        case 'BS': return JSON.stringify(value.map(b => toBase64(b)));
-        case 'SS': return JSON.stringify(value);
-        case 'NS': return JSON.stringify(value);
-
-        case 'L': return JSON.stringify(value, attributeValueJsonReplacer);
-        case 'M': return JSON.stringify(value, attributeValueJsonReplacer);
-
-
-        default: throw "Unsupported dynamodb type: " + type;
-    }
-
-}
-
-function attributeValueJsonReplacer(key: string, value: any) {
+export function attributeValueJsonReplacer(key: string, value: any) {
     if (value === null || value === undefined) {
         return value;
     }
@@ -190,5 +170,31 @@ function attributeValueJsonReplacer(key: string, value: any) {
 
     return value;
 }
+
+export function attributeValueToString(av: AttributeValue): string {
+    const [type, value] = Object.entries(av)[0];
+    if (value === null || value === undefined) {
+        return null;
+    }
+    switch (type) {
+        case 'NULL': return null;
+        case 'N': return value.toString();
+        case 'B': return toBase64(value);
+        case 'S': return value;
+        case 'BOOL': return value.toString();
+        case 'BS': return JSON.stringify(value.map(b => toBase64(b)));
+        case 'SS': return JSON.stringify(value);
+        case 'NS': return JSON.stringify(value);
+        case 'L': return JSON.stringify(value, attributeValueJsonReplacer);
+        case 'M': return JSON.stringify(value, attributeValueJsonReplacer);
+
+
+        default: throw "Unsupported dynamodb type: " + type;
+    }
+
+}
+
+
+
 
 

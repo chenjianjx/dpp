@@ -42,6 +42,8 @@ test('toInsertQuery', () => {
         "primary": { "S": "random-value-2021" }
     };
 
+    // console.log(item);
+
     const iq = toInsertQuery(tableName, {"primary": "primary_new"}, item);
     expect(iq.sql).toBe("insert into test_table(c10,c2,c3,c4,c5,c6,c7,c8,c9,id,c1,primary_new) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)");
     // console.log(iq.values[2]);
