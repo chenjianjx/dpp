@@ -118,8 +118,6 @@ export function toInsertQuery(tableName: string, columnRenameRecords: Record<str
     const placeHolders: string[] = [];
     const values: string[] = [];
 
-    console.log(item);
-
     let plIndex = 0;
     for (const [key, av] of Object.entries(item)) {
         let columnName = key;

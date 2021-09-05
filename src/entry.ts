@@ -46,7 +46,7 @@ export function load(args: string[]) {
         console.log(items.length + " items in items file");
 
 
-        await doPGLoading(sw, items.slice(0,1));
+        await doPGLoading(sw, items);
         sw.prettyPrint();
 
     })();
