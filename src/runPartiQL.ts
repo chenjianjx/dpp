@@ -1,5 +1,8 @@
 
 import { AttributeValue, DynamoDBClient, ExecuteStatementCommand, ExecuteStatementOutput } from "@aws-sdk/client-dynamodb";
+import { fileSync as tempFileSync } from 'tmp'
+import { writeFileSync } from "fs";
+import { itemsToJson } from "./ItemsJsonConverter";
 
 /**
  * 
@@ -11,7 +14,7 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
 
     const client = new DynamoDBClient({ });
 
-    const items: { [key: string]: AttributeValue; }[] = [];
+    let items: { [key: string]: AttributeValue; }[] = [];
     let NextToken;
 
     try {
@@ -30,10 +33,18 @@ export default async function run(ql: string): Promise<{ [key: string]: Attribut
             if (!NextToken) {
                 break;
             }
-        }        
-        console.log(`Fetched ${items.length} records in total `)
+        }
+        console.log(`Fetched ${items.length} records in total `);
+
+        const itemsFilename:string = tempFileSync({ prefix: 'dpp-items-', postfix: '.json' }).name;
+
+        await writeFileSync(itemsFilename, itemsToJson(items), {encoding: 'utf8'});
+
+        console.log(`Items are saved in file ${itemsFilename} . You can use command "dpp-load" to manually load it to a postgres table. `);
+
         return items;
     } finally {
         client.destroy();
     }
 }
+

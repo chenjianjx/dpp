@@ -1,5 +1,6 @@
 
-import { getQLFromArgs } from '../entry'
+import { getQLFromArgs, getItemsFilePathFromArgs } from '../entry'
+import { fileSync as tempFileSync } from 'tmp'
 
 test('getQLFromArgs', () => {
     expect(getQLFromArgs(["select * from foo"])).toBe("select * from foo");
@@ -10,4 +11,18 @@ test('getQLFromArgs', () => {
     expect(() => getQLFromArgs([])).toThrow();
     expect(() => getQLFromArgs(["insert into foo ..."])).toThrow();
 
+});
+
+
+test('getItemsFilePathFromArgs', () => {
+    
+    const file = tempFileSync().name;
+    const nonExistingFile = file + ".non.existing";
+     
+    expect(getItemsFilePathFromArgs([file])).toBe(file);
+    expect(() => getItemsFilePathFromArgs([nonExistingFile])).toThrow(); 
+
+    expect(() => getItemsFilePathFromArgs(undefined)).toThrow();
+    expect(() => getItemsFilePathFromArgs(null)).toThrow();
+    expect(() => getItemsFilePathFromArgs([])).toThrow();
 });

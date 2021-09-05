@@ -48,6 +48,19 @@ Go to [pgAdmin](http://localhost:21086)
 select * from t_1630152784804 where ...
 ```
 
+## Advanced Usage
+
+### Load PartiQL result file to Postgres
+
+After PartiQL is run using `./dpp`, the result will be saved as a temp json file. 
+
+You can load this file into Postgres without re-running `./dpp` again
+
+```
+./dpp-load /var/folders/k5/3jjw_my51_gcdm7bmt783b480000gn/T/dpp-items--18473-j2SzClrvSH09-.json
+```
+
+
 
 # For developers
 

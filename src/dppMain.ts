@@ -2,7 +2,5 @@
 
 import { execute } from "./entry";
 
-const args = process.argv.slice(2);
-
-execute(args);
+execute(process.argv.slice(2));
 
